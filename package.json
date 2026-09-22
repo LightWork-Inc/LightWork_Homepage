@@ -1,0 +1,14 @@
+{
+  "name": "lightwork-homepage",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "라이트워크 홈페이지 로컬 개발",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "dev": "node scripts/server.mjs",
+    "start": "node scripts/server.mjs",
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/server.mjs --dist"
+  }
+}

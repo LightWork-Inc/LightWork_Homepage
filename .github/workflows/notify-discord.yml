@@ -1,0 +1,26 @@
+# 조직 안 각 저장소의 .github/workflows/notify-discord.yml 로 넣는 파일.
+# 이것만 있으면 됩니다 — 웹훅·담당자 매핑은 조직 Secrets/Variables에서 상속받고,
+# 알림 로직은 mf-devops-bot의 재사용 워크플로가 처리합니다.
+#
+# scripts/rollout.mjs 가 이 파일을 조직 전 저장소에 배포합니다.
+name: Discord 알림
+
+on:
+  push:
+  pull_request:
+    types: [closed]
+  # Actions 탭 → 이 워크플로 → "Run workflow" 버튼으로 연결 테스트.
+  # 테스트 알림은 버튼을 누른 본인에게만 멘션이 갑니다.
+  workflow_dispatch:
+
+# 재사용 워크플로는 호출자보다 큰 권한을 요구할 수 없습니다.
+# 저장소 기본 권한이 "read"면 pull-requests가 빠져 있어, 여기서 명시하지 않으면
+# 워크플로가 시작조차 못 하고 startup_failure로 끝납니다.
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  notify:
+    uses: LightWork-Inc/mf-devops-bot/.github/workflows/notify.yml@main
+    secrets: inherit
