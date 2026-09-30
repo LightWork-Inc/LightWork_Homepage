@@ -7,7 +7,7 @@ import path from 'node:path';
 const project = path.resolve(fileURLToPath(new URL('../', import.meta.url)));
 const isPreview = process.argv.includes('--dist');
 const root = isPreview ? path.join(project, 'dist') : project;
-const port = Number(process.env.PORT || (isPreview ? 4173 : 5173));
+const port = Number(process.env.PORT || (isPreview ? 4173 : 8501));
 const mime = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.woff2': 'font/woff2' };
 const clients = new Set();
 const session = Date.now().toString(36);
@@ -15,7 +15,8 @@ let revision = 0;
 let reloadTimer;
 let watcher;
 const publicFile = (relative) => ['index.html', 'styles.css', 'app.js', 'theme.js'].includes(relative)
-  || /^assets\/[a-zA-Z0-9_./-]+$/.test(relative)
+  || (/^assets\/[a-zA-Z0-9_./-]+$/.test(relative)
+    && !relative.split('/').some((segment) => segment === '.' || segment === '..'))
   || (!isPreview && ['design/reference.preview.html', 'design/reference.fragment.html'].includes(relative));
 const reloadMessage = () => `data: ${JSON.stringify(`${session}:${revision}`)}\n\n`;
 const reloadScript = `<script>
@@ -72,8 +73,8 @@ server.on('error', (error) => {
   console.error(error.code === 'EADDRINUSE' ? `Port ${port} is in use. Set PORT to another local port.` : error.message);
   process.exitCode = 1;
 });
-// Loopback only: this development server is not exposed to the local network.
-server.listen(port, '127.0.0.1', () => {
+// Development is reachable by IP for feedback; built previews remain local.
+server.listen(port, isPreview ? '127.0.0.1' : '0.0.0.0', () => {
   console.log(`LIGHTWORK ${isPreview ? 'preview' : 'development'}: http://localhost:${port}`);
   if (!isPreview) {
     watcher = watch(project, { recursive: true }, (_event, filename) => {

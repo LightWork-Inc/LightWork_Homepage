@@ -5,7 +5,6 @@ document.querySelectorAll('dialog').forEach((dialog) => {
   const copy = dialog.querySelector('#dialog-copy');
   const messages = {
     about: ['더 중요한 일에 쓸 수 있도록.', '라이트워크는 사람들의 업무 시간을 돌려주는 것을 목표로 합니다. 민원 업무에서 시작해, 사람들이 더 중요한 일에 집중할 수 있는 방법을 고민합니다.'],
-    service: ['민원팩토리 연결 준비 중', '민원팩토리 서비스 연결을 준비하고 있습니다. 현재 이 페이지에서는 서비스 이용을 시작할 수 없습니다.'],
   };
   let lastTrigger;
   let motion = null;
