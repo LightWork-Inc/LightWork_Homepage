@@ -5,7 +5,7 @@ import path from 'node:path';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const output = path.join(root, 'dist');
 await mkdir(output, { recursive: true });
-for (const file of ['index.html', 'styles.css', 'app.js', 'theme.js', 'CNAME', 'robots.txt', 'sitemap.xml']) {
+for (const file of ['index.html', 'styles.css', 'app.js', 'theme.js', 'CNAME', 'robots.txt', 'sitemap.xml', 'favicon.ico']) {
   await copyFile(path.join(root, file), path.join(output, file));
 }
 await cp(path.join(root, 'assets'), path.join(output, 'assets'), { recursive: true });
